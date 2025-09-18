@@ -1,0 +1,21 @@
+{
+  "name": "student-teacher-management",
+  "version": "1.0.0",
+  "description": "A blockchain-based student details ledger system using Ethereum smart contracts for secure and decentralized management of student records, attendance, and marks.",
+  "main": "truffle.js",
+  "author": "vuk",
+  "license": "ISC",
+  "dependencies": {
+    "web3": "^1.10.0",
+    "@truffle/contract": "^4.6.31"
+  },
+  "devDependencies": {
+    "lite-server": "^2.3.0",
+    "truffle": "^5.11.5",
+    "@truffle/hdwallet-provider": "^2.1.15"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  }
+}

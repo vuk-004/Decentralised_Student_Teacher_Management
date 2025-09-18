@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StudentTeacherManagement DApp</title>
+  <link rel="stylesheet" href="style.css" /> 
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>StudentTeacher Management</h1>
+      <p>Decentralized Education Management System</p>
+    </div>
+
+    <div class="status-card">
+      <div class="status-indicator" id="status">
+        <div class="loading"></div>
+        <span>Checking MetaMask connection...</span>
+      </div>
+    </div>
+
+    <div id="welcome" class="welcome-card">
+      <div class="metamask-logo">🦊</div>
+      <h2>Welcome to StudentTeacher DApp</h2>
+      <p>Connect your MetaMask wallet to access the education management system</p>
+      <button class="btn" id="connectBtn">Connect MetaMask</button>
+    </div>
+
+    <!-- Admin View -->
+    <div id="adminView" class="role-view">
+      <h2 class="role-title">Admin Dashboard</h2>
+
+      <div class="section">
+        <h3>Add New Teacher</h3>
+        <div class="form-group">
+          <input type="text" id="teacherAddress" placeholder="Teacher Wallet Address">
+          <input type="text" id="teacherName" placeholder="Teacher Full Name">
+          <input type="number" id="teacherAge" placeholder="Teacher Age" min="18">
+        </div>
+        <div class="form-group single-button">
+          <button class="btn" id="addTeacherBtn">Add Teacher</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Add New Student</h3>
+        <div class="form-group">
+          <input type="text" id="studentAddress" placeholder="Student Wallet Address">
+          <input type="text" id="studentName" placeholder="Student Full Name">
+          <input type="number" id="studentAge" placeholder="Student Age" min="5">
+          <input type="number" id="studentSemester" placeholder="Semester" min="1">
+          <input type="email" id="studentEmail" placeholder="Student Email">
+          <input type="text" id="studentBranch" placeholder="Branch (e.g., CSE, ECE)">
+          <input type="tel" id="studentPhone" placeholder="Student Phone (e.g., 9999123456)">
+        </div>
+        <div class="form-group single-button">
+          <button class="btn" id="addStudentBtn">Add Student</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Assign Student to Teacher</h3>
+        <div class="form-group">
+          <select id="assignTeacherSelect">
+            <option value="">Select Teacher ID</option>
+          </select>
+          <select id="assignStudentSelect">
+            <option value="">Select Student ID</option>
+          </select>
+        </div>
+        <div class="form-group assign-actions">
+          <button class="btn" id="assignBtn">Assign Student</button>
+          <button class="btn btn-danger" id="removeTeacherBtn">Remove Teacher</button>
+          <button class="btn btn-danger" id="removeStudentBtn">Remove Student</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Teacher View -->
+    <div id="teacherView" class="role-view">
+      <h2 class="role-title">Teacher Dashboard (<span id="teacherIdDisplay"></span>)</h2>
+
+      <div class="section">
+        <h3>Your Assigned Students</h3>
+        <ul id="studentList" class="student-list"></ul>
+      </div>
+
+      <div id="courseSection" class="section" style="display: none;">
+        <h3>Manage Courses for Student: <span id="selectedStudentNameAndId"></span></h3>
+        <ul id="courseList" class="course-list"></ul>
+
+        <div style="margin-top: 20px;">
+          <h4 style="margin-bottom: 10px;">Add New Course</h4>
+          <div class="form-group">
+            <input type="text" id="newCourseName" placeholder="Course Name">
+            <input type="number" id="newCIE1" placeholder="CIE 1 (0-100 or blank)" min="0" max="100">
+            <input type="number" id="newCIE2" placeholder="CIE 2 (0-100 or blank)" min="0" max="100">
+            <input type="number" id="newCIE3" placeholder="CIE 3 (0-100 or blank)" min="0" max="100">
+            <input type="number" id="newAATScore" placeholder="AAT Score (0-100 or blank)" min="0" max="100">
+            <input type="number" id="newLabScore" placeholder="Lab Score (0-100 or blank)" min="0" max="100">
+            <input type="number" id="newAttendance" placeholder="Attendance % (0-100 or blank)" min="0" max="100">
+          </div>
+          <div class="form-group single-button">
+            <button class="btn" id="addCourseBtn">Add Course</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student View -->
+    <div id="studentView" class="role-view">
+      <h2 class="role-title">Student Dashboard (<span id="studentIdDisplay"></span>)</h2>
+
+      <div class="section">
+        <h3>Your Information</h3>
+        <div id="studentDetails"></div>
+      </div>
+
+      <div class="section">
+        <h3>Your Enrolled Courses</h3>
+        <ul id="studentCourseList" class="course-list"></ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

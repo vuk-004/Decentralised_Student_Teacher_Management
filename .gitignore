@@ -1,0 +1,16 @@
+
+*
+
+!.gitignore
+!README.md
+!package.json
+!truffle-config.js
+
+!contracts/
+!contracts/**
+
+!migrations/
+!migrations/**
+
+!src/
+!src/**
