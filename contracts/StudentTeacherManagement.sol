@@ -84,6 +84,16 @@ contract StudentTeacherManagement {
         require(teacherToStudent[teacherId][studentId], "Student not assigned to this teacher");
         _;
     }
+
+    modifier onlyAdminOrAssignedTeacher(uint studentId) {
+    if (msg.sender != admin) {
+        uint teacherId = teacherAddressMap[msg.sender];
+        require(teacherId != 0, "Not a teacher");
+        require(teacherToStudent[teacherId][studentId], "Not assigned to this student");
+    }
+    _;
+}
+
     
     // Admin Functions
     function addStudent(
@@ -199,8 +209,8 @@ contract StudentTeacherManagement {
     function getStudentInfo(uint studentId) 
         public 
         view 
-        onlyAdmin()
         onlyExistingStudent(studentId) 
+        onlyAdminOrAssignedTeacher(studentId)
         returns (
             string memory name,
             uint age,

@@ -126,7 +126,7 @@ async function setupAdminUI() {
 
     try {
         assignTeacherSelect.innerHTML = '<option value="">Select Teacher ID</option>';
-        const teacherIds = await contract.methods.getAllTeachers().call({ from: account });
+        const teacherIds = await contract.methods.getAllTeacherIds().call({ from: account });
         for (const tid of teacherIds) {
             const teacher = await contract.methods.getTeacherInfo(tid).call({ from: account });
             let opt = new Option(`ID: ${tid} - ${teacher.name} (${teacher.teacherAddress.substring(0,6)}...)`, tid);
@@ -135,7 +135,7 @@ async function setupAdminUI() {
         if (teacherIds.length === 0) assignTeacherSelect.innerHTML = '<option value="">No teachers found.</option>';
 
         assignStudentSelect.innerHTML = '<option value="">Select Student ID</option>';
-        const studentIds = await contract.methods.getAllStudents().call({ from: account });
+        const studentIds = await contract.methods.getAllStudentIds().call({ from: account });
         for (const sid of studentIds) {
             const student = await contract.methods.getStudentInfo(sid).call({ from: account });
             let opt = new Option(`ID: ${sid} - ${student.name} (${student.studentAddress.substring(0,6)}...)`, sid);
@@ -169,8 +169,12 @@ async function setupAdminUI() {
         const email = document.getElementById('studentEmail').value.trim();
         const branch = document.getElementById('studentBranch').value.trim();
         const phone = document.getElementById('studentPhone').value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+         const phoneRegex = /^\d{10}$/;  
 
-        if (addr && name && age && semester && email && branch && phone && web3.utils.isAddress(addr) && parseInt(age) >=18 && parseInt(semester) >=1) {
+        if (addr && name && age && semester && email && branch && phone && web3.utils.isAddress(addr) && parseInt(age) >=18 && parseInt(semester) >=1 &&
+        emailRegex.test(email) &&
+        phoneRegex.test(phone)) {
             try {
                 await contract.methods.addStudent(name, age, semester, email, branch, phone, addr).send({ from: account });
                 alert(`Student added successfully`);
@@ -191,24 +195,24 @@ async function setupAdminUI() {
     };
 
     document.getElementById('removeStudentBtn').onclick = async () => {
-        const studentId = assignStudentSelect.value;
+        const studentId = prompt("Enter the Student ID you want to remove:");
         if (studentId && confirm(`Are you sure you want to remove student with ID ${studentId}? This will delete all their data.`)) {
             try {
                 await contract.methods.removeStudent(studentId).send({ from: account });
                 alert("Student removed successfully");
                 setupAdminUI();
-            } catch (error) { alert("Error removing student: " + error.message); }
+            } catch (error) { alert("Error removing student: student doesnt exist or id is wrong"); }
         }
     };
 
     document.getElementById('removeTeacherBtn').onclick = async () => {
-        const teacherId = assignTeacherSelect.value;
+        const teacherId = prompt("Enter the Teacher ID you want to remove:");
         if (teacherId && confirm(`Are you sure you want to remove teacher with ID ${teacherId}? This will unassign them from all students.`)) {
             try {
-                await contract.methods.removeTeacher(teacherId).send({ from: account });
+                await contract.methods.removeTeacher(teacherId) .send({ from: account });
                 alert("Teacher removed successfully");
                 setupAdminUI();
-            } catch (error) { alert("Error removing teacher: " + error.message); }
+            } catch (error) { alert("Error removing teacher: teacher doesnt exist or wrong id"); }
         }
     };
 }
@@ -227,7 +231,7 @@ async function setupTeacherUI() {
         }
 
         for (const studentId of studentIds) {
-            let studentNameDisplay = `Student ID: ${studentId}`;
+            let studentNameDisplay = `${studentId}`;
             try {
                 const studentInfo = await contract.methods.getStudentInfo(studentId).call({ from: account }); 
                 if(studentInfo) {
